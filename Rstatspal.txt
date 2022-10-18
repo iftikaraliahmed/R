@@ -1,0 +1,77 @@
+#Reading the data
+product <- read.csv("Predicting_Customer_Behaviour_data_modified.csv")
+#product1<- read.csv("PRODUCT_PURCHASE_DATASET_18.07.2017.csv")
+product1 <- read.csv("Predicting_Customer_Behaviour_data_modified.csv")
+
+str(product)
+install.packages('gmodels')
+library(gmodels) 
+
+#EDA
+
+#1.          Does Age have any effect on particular Product access? 
+
+str(product)       #Checking the structure whether the data has come properly or not #
+#Steps for creating contingency table – users are to be groups into six age-groups as per their age #
+#Creating new variable AGE_GROUP under product #
+product$AGE_RANGE<-ifelse(product$USER_AGE>=18 & product$USER_AGE<=20,1,ifelse(product$USER_AGE>=21 & product$USER_AGE<=23,2,ifelse(product$USER_AGE>=24 & product$USER_AGE<=26,3,ifelse(product$USER_AGE>=27 & product$USER_AGE<=29,4,ifelse(product$USER_AGE>=30 & product$USER_AGE<=32,5,ifelse(product$USER_AGE>=33 & product$USER_AGE<=35,6,0))))))  #Creating the new variable age range
+str(product)     #Checking whether the new variable has been created properly or not
+
+CrossTable(product$AGE_RANGE, product$PRODUCT, chisq = TRUE)
+
+#2. Which products and brands have more access duration?
+
+library(plyr)
+sum_product <- ddply(product, c("PRODUCT"), summarise, N=length(DURATION),
+                                                       mean=mean(DURATION),
+                                                       sd=mean(DURATION),
+                                                       se = sd/sqrt(N),
+                                                       max = max(DURATION))
+sum_product
+
+sum_brand <- ddply(product, c("BRANDCODE"), summarise, N=length(DURATION),
+                     mean=mean(DURATION),
+                     sd=mean(DURATION),
+                     se = sd/sqrt(N),
+                     max = max(DURATION))
+
+sum_brand
+
+
+#3.          Does region have any effect on product access? 
+
+CrossTable(product$REG_NAME, product$PRODUCT, chisq = TRUE)
+
+#4. Does Last Login have any effect on purchase pattern?
+
+product$login_range<-ifelse(product$LASTLOGIN<2,1,ifelse(product$LASTLOGIN>=2 & product$LASTLOGIN<5,2,ifelse(product$LASTLOGIN>=5 & product$LASTLOGIN<14,3,ifelse(product$LASTLOGIN>=14 & product$LASTLOGIN<30,4,ifelse(product$LASTLOGIN>=30 & product$LASTLOGIN<60,5,ifelse(product$LASTLOGIN>=60,6,0))))))  #Creating the new variable age range
+str(product)
+CrossTable(product$login_range, product$PURCHASE, chisq = TRUE)
+
+#5.          Does User Job have any effect on the purchase of product?
+
+CrossTable(product1$USER_JOB_DET, product1$PURCHASE, chisq = TRUE)
+
+#6. Does User Income have any effect on the Payment Mode?
+
+
+product1_purchased <- subset(product1, PURCHASE == 1) #Getting the records where the product was purchased
+product1_purchased$inc_grp <- ifelse(product1_purchased$USER_INCOME < 10000, 'LIG', ifelse(product1_purchased$USER_INCOME>= 10000 & product1_purchased$USER_INCOME < 40000,'MIG',ifelse(product1_purchased$USER_INCOME>= 40000,'HIG','OTHERS' ) ))
+
+summary(product1_purchased)
+
+str(product1_purchased)
+CrossTable(product1_purchased$inc_grp, product1_purchased$PAYMENT_DET, chisq = TRUE)
+
+
+
+#Fitting Logistic Regression Data
+init_log_model <-glm(formula = product1$PURCHASE ~ product1$PRODUCT + product1$BRANDCODE , family = "binomial", data = product1)
+summary(init_log_model)
+
+
+
+init_log_model1<-glm(formula = PURCHASE ~ DURATION , family = "binomial", data = train_set1)
+pred1 <- predict(init_log_model1, type="response", newdata=test_set1)
+pred2<-ifelse(pred1>=0.6,1,0)
+confusionMatrix(pred2,test_set1$PURCHASE,positive="1")
