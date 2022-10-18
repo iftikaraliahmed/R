@@ -1,0 +1,130 @@
+> x=read.csv('C:\Users\Administrator\Documents\Predicting_Customer_Behaviour_data_modified.csv')
+Error: '\U' used without hex digits in character string starting "'C:\U"
+> x=read.csv('C:/Users/Administrator/Documents/Predicting_Customer_Behaviour_data_modified.csv')
+> install.packages('plyr')
+Installing package into ‘C:/Users/Administrator/Documents/R/win-library/3.5’
+(as ‘lib’ is unspecified)
+also installing the dependency ‘Rcpp’
+
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/3.5/Rcpp_1.0.0.zip'
+Content type 'application/zip' length 4480229 bytes (4.3 MB)
+downloaded 4.3 MB
+
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/3.5/plyr_1.8.4.zip'
+Content type 'application/zip' length 1297871 bytes (1.2 MB)
+downloaded 1.2 MB
+
+package ‘Rcpp’ successfully unpacked and MD5 sums checked
+package ‘plyr’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+	C:\Users\Administrator\AppData\Local\Temp\Rtmp6dI1xi\downloaded_packages
+> library('plyr')
+> m <- count(product1$PURCHASE == 1)
+Error in count(product1$PURCHASE == 1) : object 'product1' not found
+> nrow(product1)
+Error in nrow(product1) : object 'product1' not found
+> nrow(PRODUCT1)
+Error in nrow(PRODUCT1) : object 'PRODUCT1' not found
+> m <- count(x$PURCHASE == 1)
+> m
+      x freq
+1 FALSE 7461
+2  TRUE 3696
+> n_PURCHASE <- m$freq[m$x == TRUE]
+> n_PURCHASE
+[1] 3696
+> View(x)
+> prob = n_PURCHASE/nrow(x)
+> prob
+[1] 0.3312718
+> n=m$freq+m$x
+> n
+[1] 7461 3697
+> n=m$freq[1]+m$freq[2]
+> n
+[1] 11157
+> t <- count(x$BRANDCODE == 'SAMSUNG')
+> t
+      x freq
+1 FALSE 8408
+2  TRUE 2749
+> n=t$freq[2]
+> n
+[1] 2749
+> tot_samsung=t$freq[]
+> tot_samsung
+[1] 8408 2749
+> prob_samsung
+Error: object 'prob_samsung' not found
+> prob_samsung=o/tot_samsung
+Error: object 'o' not found
+> prob_samsung=n/prob_samsung
+Error: object 'prob_samsung' not found
+> prob_samsung=t$freq[1]+t$freq[2]
+> tot_samsung
+[1] 8408 2749
+> prob_samsung=n/tot_samsung
+> prob
+[1] 0.3312718
+> o=t[2]$freq
+> o
+[1] 8408 2749
+> o=t$freq[2]
+> o
+[1] 2749
+> prob_samsung=o/tot_samsung
+> o
+[1] 2749
+> prob_samsung
+[1] 0.3269505 1.0000000
+> prob_samsung=o/tot_samsung
+> prob_samsung
+[1] 0.3269505 1.0000000
+> prob_samsung=o/n
+> prob_samsung
+[1] 1
+> f<-count(x$BRANDCODE=='SAMSUNG' & x$PURCHASE==1)
+> f
+      x  freq
+1 FALSE 10229
+2  TRUE   928
+> sam_purchase=f$freq[2]
+> sam_purchase_prob=sam_purchase/tot_samsung
+> sam_purchase_prob
+[1] 0.1103711 0.3375773
+> a=10
+> a
+[1] 10
+> a=15
+> a
+[1] 15
+> n
+[1] 2749
+> a<-count(x$PURCHASE==1)
+> a
+      x freq
+1 FALSE 7461
+2  TRUE 3696
+> b<-count(x$PURCHASE==1 & X$BRANDCODE=='SAMSUNG')
+Error in count(x$PURCHASE == 1 & X$BRANDCODE == "SAMSUNG") : 
+  object 'X' not found
+> b<-count(x$PURCHASE==1 & x$BRANDCODE=='SAMSUNG')
+> b
+      x  freq
+1 FALSE 10229
+2  TRUE   928
+> prob_3=b_freq[2]/a$freq[2]
+Error: object 'b_freq' not found
+> prob_3=b$freq[2]/a$freq[2]
+> prob_3
+[1] 0.2510823
+> prob_samsung
+[1] 1
+> o=t$freq[2]
+> o
+[1] 2749
+> prob_samsung=o/tot_samsung
+> o
+[1] 2749
+> prob_samsung
