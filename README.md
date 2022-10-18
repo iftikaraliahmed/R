@@ -1,2 +1,2 @@
-# instacart_2017_05_01
-Instacart
+# R
+R programming from Manipal Academy of Higher Education
